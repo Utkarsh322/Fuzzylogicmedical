@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroDx - Fuzzy Logic Medical Expert System</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-background">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="brand-icon"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>NeuroDx</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#diagnosis" class="nav-link">Diagnosis</a></li>
+                <li><a href="#how" class="nav-link">How It Works</a></li>
+                <li><a href="#about" class="nav-link">About Project</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="app-root"></main>
+
+    <!-- Templates for SPA Routing -->
+
+    <!-- Home Page Template -->
+    <template id="tmpl-home">
+        <div class="page-container hero-section fade-in">
+            <div class="hero-content">
+                <div class="badge">Next-Gen Expert System</div>
+                <h1 class="hero-title">Fuzzy Logic-Based<br><span class="gradient-text">Medical Diagnosis</span></h1>
+                <p class="hero-subtitle">An advanced interpretable AI system that analyzes multi-dimensional patient biometrics using overlapping fuzzy sets to precisely predict disease risk.</p>
+                <div class="hero-cta">
+                    <a href="#diagnosis" class="btn btn-primary">Start Diagnosis</a>
+                    <a href="#how" class="btn btn-outline">Explore the Logic</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="glass-card mockup">
+                    <div class="mock-header">System Initialized</div>
+                    <div class="mock-bar" style="width: 80%"></div>
+                    <div class="mock-bar" style="width: 65%"></div>
+                    <div class="mock-bar" style="width: 90%; background: var(--risk-high)"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Diagnosis Page Template -->
+    <template id="tmpl-diagnosis">
+        <div class="page-container diagnosis-layout fade-in">
+            <!-- Left: Inputs & Editor -->
+            <div class="panel glass-card">
+                <div class="panel-header">
+                    <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Patient Parameters</h2>
+                </div>
+                <!-- Inputs -->
+                <div class="sliders-wrapper" id="sliders-wrapper">
+                    <div class="slider-group">
+                        <label>Age <span class="val" id="val-age">45 yrs</span></label>
+                        <input type="range" id="input-age" min="10" max="100" value="45">
+                    </div>
+                    <div class="slider-group">
+                        <label>BMI <span class="val" id="val-bmi">24.0 kg/m²</span></label>
+                        <input type="range" id="input-bmi" min="10" max="50" step="0.1" value="24.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>Blood Pressure <span class="val" id="val-bp">120 mmHg</span></label>
+                        <input type="range" id="input-bp" min="80" max="200" value="120">
+                    </div>
+                    <div class="slider-group">
+                        <label>Blood Sugar <span class="val" id="val-sugar">100 mg/dL</span></label>
+                        <input type="range" id="input-sugar" min="50" max="300" value="100">
+                    </div>
+                </div>
+
+                <!-- Custom Rule Editor -->
+                <div class="rule-editor-section" style="margin-top: 2rem;">
+                    <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Fuzzy Rule Editor</h3>
+                    <div class="rule-builder">
+                        <span>IF</span>
+                        <select id="rule-age"><option value="*">-</option><option value="Low">Age Low</option><option value="Medium">Age Med</option><option value="High">Age High</option></select>
+                        <span>AND</span>
+                        <select id="rule-bmi"><option value="*">-</option><option value="Low">BMI Low</option><option value="Medium">BMI Med</option><option value="High">BMI High</option></select>
+                        <span>AND</span>
+                        <select id="rule-bp"><option value="*">-</option><option value="Low">BP Low</option><option value="Medium">BP Med</option><option value="High">BP High</option></select>
+                        <span>AND</span>
+                        <select id="rule-sugar"><option value="*">-</option><option value="Low">Sug Low</option><option value="Medium">Sug Med</option><option value="High">Sug High</option></select>
+                        <span>THEN Risk</span>
+                        <select id="rule-risk"><option value="Low">Low</option><option value="Medium">Medium</option><option value="High" selected>High</option></select>
+                        <button class="btn btn-primary btn-sm" id="btn-add-rule">+</button>
+                    </div>
+                    <div class="custom-rules-list" id="custom-rules-list"></div>
+                    <button class="btn btn-outline btn-sm" id="btn-reset-rules" style="margin-top: 0.5rem">Reset to Default Rules</button>
+                </div>
+            </div>
+
+            <!-- Center/Right: Results & Charts -->
+            <div class="results-layout">
+                <!-- Top: Risk Output -->
+                <div class="panel glass-card result-panel">
+                    <div class="gauge-ring">
+                        <svg viewBox="0 0 100 50">
+                            <path class="ring-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
+                            <path class="ring-fill" id="ring-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+                        </svg>
+                        <div class="score" id="risk-score">0.00</div>
+                    </div>
+                    <div class="risk-assessment">
+                        <h3>Overall Assessment</h3>
+                        <div class="level" id="risk-level">Calculating...</div>
+                    </div>
+                </div>
+
+                <!-- Mid: Explainable AI -->
+                <div class="panel glass-card xai-panel">
+                    <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> Explainable AI (XAI)</h3>
+                    <div class="xai-verdict" id="xai-verdict"></div>
+                    <div class="xai-rules">
+                        <h4>Top Triggered Rules:</h4>
+                        <ul id="active-rules"></ul>
+                    </div>
+                </div>
+
+                <!-- Bottom: Graphs & History -->
+                <div class="bottom-panels">
+                    <div class="panel glass-card graph-panel">
+                        <div class="chart-header">
+                            <h3>Membership Curves</h3>
+                            <select id="chart-select">
+                                <option value="age">Age</option>
+                                <option value="bmi">BMI</option>
+                                <option value="bp">Blood Pressure</option>
+                                <option value="sugar">Blood Sugar</option>
+                                <option value="risk">Risk Output</option>
+                            </select>
+                        </div>
+                        <div style="height: 200px;">
+                            <canvas id="fuzzyChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="panel glass-card history-panel">
+                        <h3>Saved Diagnoses</h3>
+                        <div id="history-container" class="history-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- How It Works Template -->
+    <template id="tmpl-how">
+        <div class="page-container content-page fade-in">
+            <h1 class="page-title">How It Works</h1>
+            <div class="glass-card text-content">
+                <h2>1. Fuzzification</h2>
+                <p>Unlike Boolean logic where elements are strictly true or false (e.g., BMI > 25 is "Overweight"), fuzzy logic uses degrees of membership. A patient's BMI of 24.5 might be 20% "Normal" and 80% "Overweight". We use Triangular and Trapezoidal membership functions to map crisp inputs (Age, BMI, BP, Blood Sugar) to these fuzzy sets.</p>
+                
+                <h2>2. Rule Evaluation (Mamdani Inference)</h2>
+                <p>The expert system evaluates a knowledge base of IF-THEN rules. For example: <code>IF Age is Old AND BP is High THEN Risk is High</code>. We use the MIN operator to find the rule firing strength (AND logic) and MAX operator for aggregating the outputs.</p>
+                
+                <h2>3. Defuzzification (Centroid Method)</h2>
+                <p>The aggregated fuzzy output creates a geometric shape representing the risk probability. Defuzzification calculates the center of gravity (centroid) of this shape to yield a single, crisp risk score between 0.0 and 1.0.</p>
+
+                <h2>4. Explainable AI (XAI)</h2>
+                <p>Because the system is based on human-readable linguistic rules, we can dynamically trace back which rules fired with the highest weight to explain exactly <em>why</em> a diagnosis was reached.</p>
+            </div>
+        </div>
+    </template>
+
+    <!-- About Project Template -->
+    <template id="tmpl-about">
+        <div class="page-container content-page fade-in">
+            <h1 class="page-title">About the Project</h1>
+            <div class="glass-card text-content">
+                <h2>Fuzzy Logic–Based Medical Diagnosis System</h2>
+                <p>This project addresses the inherent uncertainty, imprecision, and ambiguity in medical diagnosis. Human biology does not abide by strict cut-offs; disease risk occurs on a spectrum. Fuzzy Logic offers a robust mathematical framework for handling this.</p>
+                
+                <h3>Novelty</h3>
+                <ul>
+                    <li><strong>Multi-parameter overlapping ranges:</strong> Captures edge cases where traditional thresholds fail.</li>
+                    <li><strong>Customizable Rule Base:</strong> Healthcare professionals can modify the clinical rules via the built-in Rule Editor without writing code.</li>
+                    <li><strong>Real-time Explanations:</strong> The integration of XAI instantly links complex mathematics back to clinical reasoning.</li>
+                    <li><strong>100% Client-Side Engine:</strong> Secure, privacy-preserving architecture that executes locally.</li>
+                </ul>
+                <p style="margin-top: 2rem; color: var(--primary)">Built for Soft Computing Courseware.</p>
+            </div>
+        </div>
+    </template>
+
+    <script src="js/fuzzy.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
